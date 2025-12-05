@@ -8,26 +8,74 @@
 import SwiftUI
 
 struct CalculatorView: View {
-    var body: some View {
+    
+
+    @EnvironmentObject private var viewModel: ViewModel
+    
+    var body: some View{
         VStack{
-            
             Spacer()
-            Text("0")
-                .padding()
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .font(.system(size: 88, weight: .light))
-                .lineLimit(1)
-                .minimumScaleFactor(0.2)
-            
-            //tobutton
+            displayText
+            buttonpad
         }
-
-
+        .padding(Constants.padding)
         .background(Color.black)
+        
+    }
+    
+    }
+
+
+// previews
+
+struct CalculatorView_Previews: PreviewProvider{
+    static var previews: some View{
+        CalculatorView()
+            .environmentObject(CalculatorView.ViewModel())
     }
 }
 
-#Preview {
-    CalculatorView()
+
+//components
+
+
+extension CalculatorView{
+    private var displayText: some View{
+        Text(viewModel.displayText)
+            .padding()
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .font(.system(size: 88, weight: .light))
+            .lineLimit(1)
+            .minimumScaleFactor(0.2)
+    }
+    
+    
+    private var buttonpad: some View{
+        VStack(spacing: Constants.padding){
+            ForEach(viewModel.buttonTypes, id: \.self){ row in
+                HStack(spacing: Constants.padding){
+                    ForEach(row, id: \.self){ buttonType in
+                        CalculatorButton(buttonType: buttonType)
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
 }
+
+
+
+
+
+
+
+//
+//
+//#Preview {
+//    CalculatorView()
+//}
